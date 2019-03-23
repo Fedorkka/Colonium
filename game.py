@@ -77,6 +77,8 @@ def new_game():
 
 
 def draw():
+    global player
+    step = 0
     for i in range(8):
         for z in range(8):
             if game_field[i][z].player != 0 and game_field[i][z].level != 0:
@@ -86,6 +88,7 @@ def draw():
                 screen.blit(res, (i * 50 + l * (i + 1), z * 50 + l * (z + 1)))
             if game_field[i][z].player == player:
                 screen.blit(surf, (i * 50 + l * (i + 1), z * 50 + l * (z + 1)))
+                step = 1
             x, y = pygame.mouse.get_pos()
             if (i * 50 + l * (i + 1) <= x <= i * 50 + l * (i + 1) + 50) \
                     and (z * 50 + l * (z + 1) <= y <= z * 50 + l * (z + 1) + 50) \
@@ -93,6 +96,8 @@ def draw():
                 surf.fill((255,200,0))
                 screen.blit(surf, (i * 50 + l * (i + 1), z * 50 + l * (z + 1)))
                 surf.fill((0,0,0))
+    if step == 0:
+        player+=1
 
 
     for i in range(9):
