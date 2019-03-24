@@ -69,15 +69,12 @@ def new_game():
                 pygame.image.load(
                     "../Colonium/gameData/Chips/image_part_" + str(i + 1) + str(z + 1) +
                     ".png"))
-    for i in range(11):
-        playlist.append("../Colonium/gameData/Music/m"+str(i+1)+".mp3")
-
-
-
+    for i in range(10):
+        playlist.append("../Colonium/gameData/Music/m" + str(i + 1) + ".mp3")
 
 
 def draw():
-    global player
+    global player, players
     step = 0
     for i in range(8):
         for z in range(8):
@@ -93,23 +90,23 @@ def draw():
             if (i * 50 + l * (i + 1) <= x <= i * 50 + l * (i + 1) + 50) \
                     and (z * 50 + l * (z + 1) <= y <= z * 50 + l * (z + 1) + 50) \
                     and game_field[i][z].player == player:
-                surf.fill((255,200,0))
+                surf.fill((255, 200, 0))
                 screen.blit(surf, (i * 50 + l * (i + 1), z * 50 + l * (z + 1)))
-                surf.fill((0,0,0))
-    if step == 0:
-        player+=1
-
+                surf.fill((0, 0, 0))
 
     for i in range(9):
         pygame.draw.line(screen, (100, 100, 100), [i * 50 + l * i, 0], [i * 50 + l * i, 400 + l * 9], 2)
         pygame.draw.line(screen, (100, 100, 100), [0, i * 50 + l * i], [400 + l * 9, i * 50 + l * i], 2)
+    if step == 0 and players != 2:
+        turn()
+        players -= 1
 
 
-def turn(player):
+def turn():
+    global player
     player += 1
     if player == players + 1:
         player = 1
-    return player
 
 
 def players_quantity(k, root):
@@ -125,6 +122,7 @@ def test():
     except NameError:
         quit()
 
+
 def main_menu():
     root = Tk()
     root.geometry("400x400")
@@ -135,14 +133,14 @@ def main_menu():
     root.mainloop()
     test()
 
+
 def new_track():
     global tr
     tr += 1
-    if tr == 11:
+    if tr == 10:
         tr = 0
     pygame.mixer.music.load(playlist[tr])
     pygame.mixer.music.play()
-
 
 
 game_field = []
@@ -163,7 +161,7 @@ pygame.display.set_caption("Colonium")
 done = False
 clock = pygame.time.Clock()
 pygame.mixer.init()
-tr= -1
+tr = -1
 pygame.mixer.music.set_endevent(pygame.USEREVENT)
 new_track()
 
@@ -184,7 +182,7 @@ while not done:
                             and (z * 50 + l * (z + 1) <= y <= z * 50 + l * (z + 1) + 50) \
                             and game_field[i][z].player == player:
                         game_field[i][z].level_up(1)
-                        player = turn(player)
+                        turn()
     screen.fill((255, 255, 255))
     draw()
     pygame.display.flip()
